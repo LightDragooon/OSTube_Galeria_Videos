@@ -1,7 +1,7 @@
-#include <string.h> 
-#include <unistd.h> 
-#include <stdio.h> 
-#include <stdlib.h> 
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct request;
 
@@ -56,7 +56,7 @@ struct queryValue { //Valor de cada query
     char value[200];
 };
 
-struct request* parseQuery(char *text){    
+struct request* parseQuery(char *text){
     struct request* req = malloc(sizeof(struct request));
     req->query = malloc( sizeof(struct queryValue) * 10);
 
@@ -70,7 +70,7 @@ struct request* parseQuery(char *text){
         char value[200] = {0};
         int keyAdded = 0;
         int valueAdded = 0;
-        
+
         while (aux != end){
             key[keyAdded++] = *aux;
             aux++;
@@ -84,11 +84,11 @@ struct request* parseQuery(char *text){
 
         while (*aux != 0){
             if (end && aux == end) break;
-            
+
             value[valueAdded++] = *aux;
             aux++;
             i++;
-            
+
         }
         printf("value: %s\n", value);
 
@@ -120,30 +120,30 @@ struct index* getFuction(char* path, struct index indexes[]){
 //The idea is to parse the request into direction and query
 struct request* parseRequest(char* buffer){
 	char* aux = buffer+4; //Inicia acá porque todos son get
-	char path[100] = {0}; 
-	char query[1000] = {0}; 
+	char path[100] = {0};
+	char query[1000] = {0};
 
 	int pathAdded = 0;
 	int queryAdded = 0;
-	
+
 	char* endRead = strstr(buffer, " HTTP/1.1");
-	
+
 	while (aux != NULL){
 		if (aux == endRead){
 			goto parsingDone;
 		} else if (*aux == '?')	break;
-		
+
 		path[pathAdded++] = *aux;
 		aux++;
 	}
 	aux++; //To skip the ?
 
 	while (aux != NULL){ //Parsing the query
-		if (aux == endRead)	break;		
+		if (aux == endRead)	break;
 		query[queryAdded++] = *aux;
 		aux++;
 	}
-    
+
     parsingDone:
     printf("Parse result");
 	printf("\n%s\n", path);
@@ -152,11 +152,10 @@ struct request* parseRequest(char* buffer){
     struct request* req = parseQuery(query);
     strcpy(req->path, path);
 
-	
-	
+
+
 
     printf("That ended");
     return req;
 
 }
-
